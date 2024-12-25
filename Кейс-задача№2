@@ -1,0 +1,85 @@
+Module Module1
+
+    ' Базовый класс
+    Public Class BaseClass
+        Protected randomNumber As Integer
+
+        ' Конструктор базового класса
+        Public Sub New()
+            ' Генерация случайного числа (от 1 до 100)
+            Dim random As New Random()
+            randomNumber = random.Next(1, 101)
+            Console.WriteLine("Конструктор базового класса вызван. Сгенерировано случайное число.")
+        End Sub
+
+        ' Виртуальный метод базового класса
+        Public Overridable Sub DisplayNumber()
+            Console.WriteLine($"Базовый класс: случайное число - {randomNumber}")
+        End Sub
+
+        ' Метод, возвращающий значение случайного числа
+        Public Function GetRandomNumber() As Integer
+            Return randomNumber
+        End Function
+
+
+    End Class
+
+    ' Производный класс
+    Public Class DerivedClass
+        Inherits BaseClass
+        Private derivedNumber As Integer
+
+        ' Конструктор производного класса
+        Public Sub New()
+            MyBase.New() ' Вызов конструктора базового класса
+            ' Генерация случайного числа (от 101 до 200)
+            Dim random As New Random()
+            derivedNumber = random.Next(101, 201)
+            Console.WriteLine("Конструктор производного класса вызван. Сгенерировано еще одно случайное число.")
+        End Sub
+
+        ' Переопределенный метод из базового класса
+        Public Overrides Sub DisplayNumber()
+            MyBase.DisplayNumber()
+            Console.WriteLine($"Производный класс: случайное число - {derivedNumber}")
+        End Sub
+
+        ' Метод, специфичный для производного класса
+        Public Function GetDerivedNumber() As Integer
+            Return derivedNumber
+        End Function
+
+        Public Sub AdditionalAction()
+            Console.WriteLine("Дополнительное действие производного класса")
+        End Sub
+
+
+    End Class
+
+
+    Sub Main()
+        Console.WriteLine("--- Создание и использование объекта базового класса ---")
+        Dim baseObj As New BaseClass()
+        baseObj.DisplayNumber()
+        Console.WriteLine($"Получено случайное число из базового класса: {baseObj.GetRandomNumber()}")
+
+        Console.WriteLine()
+        Console.WriteLine("--- Создание и использование объекта производного класса ---")
+        Dim derivedObj As New DerivedClass()
+        derivedObj.DisplayNumber()
+        Console.WriteLine($"Получено случайное число из базового класса (через производный): {derivedObj.GetRandomNumber()}")
+        Console.WriteLine($"Получено случайное число из производного класса: {derivedObj.GetDerivedNumber()}")
+
+        derivedObj.AdditionalAction()
+        Console.WriteLine()
+
+        'Полиморфизм
+        Console.WriteLine("--- Полиморфизм ---")
+        Dim polyObj As BaseClass = derivedObj
+        polyObj.DisplayNumber() ' Вызов метода из производного класса
+
+        Console.ReadKey()
+    End Sub
+
+End Module
