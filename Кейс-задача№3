@@ -1,1 +1,97 @@
+-- --------------------------------------------------------
+-- Хост:                         127.0.0.1
+-- Версия сервера:               9.0.1 - MySQL Community Server - GPL
+-- Операционная система:         Win64
+-- HeidiSQL Версия:              12.8.0.6908
+-- --------------------------------------------------------
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Дамп структуры базы данных tourism
+CREATE DATABASE IF NOT EXISTS `tourism` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `tourism`;
+
+-- Дамп структуры для таблица tourism.cities
+CREATE TABLE IF NOT EXISTS `cities` (
+  `CityID` int NOT NULL AUTO_INCREMENT,
+  `CityName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Country` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`CityID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Экспортируемые данные не выделены.
+
+-- Дамп структуры для таблица tourism.clients
+CREATE TABLE IF NOT EXISTS `clients` (
+  `ClientID` int NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `LastName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`ClientID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Экспортируемые данные не выделены.
+
+-- Дамп структуры для таблица tourism.services
+CREATE TABLE IF NOT EXISTS `services` (
+  `ServiceID` int NOT NULL AUTO_INCREMENT,
+  `ServiceName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `ServiceDescription` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  PRIMARY KEY (`ServiceID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Экспортируемые данные не выделены.
+
+-- Дамп структуры для таблица tourism.tourorders
+CREATE TABLE IF NOT EXISTS `tourorders` (
+  `OrderID` int NOT NULL AUTO_INCREMENT,
+  `ClientID` int NOT NULL,
+  `TourTypeID` int NOT NULL,
+  `StartDate` date NOT NULL,
+  `EndDate` date NOT NULL,
+  `TotalCost` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`OrderID`),
+  KEY `FK_TourOrders_Clients` (`ClientID`),
+  KEY `FK_TourOrders_TourTypes` (`TourTypeID`),
+  CONSTRAINT `FK_TourOrders_Clients` FOREIGN KEY (`ClientID`) REFERENCES `clients` (`ClientID`),
+  CONSTRAINT `FK_TourOrders_TourTypes` FOREIGN KEY (`TourTypeID`) REFERENCES `tourtypes` (`TourTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Экспортируемые данные не выделены.
+
+-- Дамп структуры для таблица tourism.tourorderservices
+CREATE TABLE IF NOT EXISTS `tourorderservices` (
+  `OrderID` int NOT NULL,
+  `ServiceID` int NOT NULL,
+  PRIMARY KEY (`OrderID`,`ServiceID`),
+  KEY `FK_TourOrderServices_Services` (`ServiceID`),
+  CONSTRAINT `FK_TourOrderServices_Services` FOREIGN KEY (`ServiceID`) REFERENCES `services` (`ServiceID`),
+  CONSTRAINT `FK_TourOrderServices_TourOrders` FOREIGN KEY (`OrderID`) REFERENCES `tourorders` (`OrderID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Экспортируемые данные не выделены.
+
+-- Дамп структуры для таблица tourism.tourtypes
+CREATE TABLE IF NOT EXISTS `tourtypes` (
+  `TourTypeID` int NOT NULL AUTO_INCREMENT,
+  `TourTypeName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  PRIMARY KEY (`TourTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Экспортируемые данные не выделены.
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
