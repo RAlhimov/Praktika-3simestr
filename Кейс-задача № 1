@@ -1,0 +1,62 @@
+Imports Microsoft.VisualBasic
+
+Public Class Class1
+
+End Class
+Module Module1
+
+    Sub Main()
+        Dim N As Integer
+        Console.Write("Введите размер массива N: ")
+        Integer.TryParse(Console.ReadLine(), N)
+
+        If N <= 0 Then
+            Console.WriteLine("Размер массива должен быть больше 0.")
+            Console.ReadKey()
+            Return
+        End If
+
+        Dim A(N - 1) As Integer ' VB.NET массивы индексируются с 0
+        Console.WriteLine("Введите элементы массива:")
+        For i As Integer = 0 To N - 1
+            Console.Write($"A({i + 1}) = ")
+            Integer.TryParse(Console.ReadLine(), A(i))
+        Next
+
+        Dim minVal As Integer = A(0)
+        Dim maxVal As Integer = A(0)
+        Dim minIndex As Integer = 0
+        Dim maxIndex As Integer = 0
+
+        For i As Integer = 1 To N - 1
+            If A(i) < minVal Then
+                minVal = A(i)
+                minIndex = i
+            End If
+            If A(i) > maxVal Then
+                maxVal = A(i)
+                maxIndex = i
+            End If
+        Next
+
+        If minIndex > maxIndex Then
+            Dim tempIndex As Integer = minIndex
+            minIndex = maxIndex
+            maxIndex = tempIndex
+        End If
+
+        If Math.Abs(maxIndex - minIndex) <= 1 Then
+            Console.WriteLine("Минимум и максимум находятся рядом или совпадают, сумма равна 0")
+        Else
+            Dim sumNeg As Integer = 0
+            For i As Integer = minIndex + 1 To maxIndex - 1
+                If A(i) < 0 Then
+                    sumNeg += A(i)
+                End If
+            Next
+            Console.WriteLine($"Сумма отрицательных элементов между min и max: {sumNeg}")
+        End If
+        Console.ReadKey()
+    End Sub
+
+End Module
